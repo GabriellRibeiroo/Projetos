@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Placar RPG</title>
+
+  <style>
+
+    body { font-family: Arial; text-align: center; background: #222; color: white; }
+
+    table { margin: auto; border-collapse: collapse; }
+
+    th, td { padding: 10px; border: 1px solid #555; }
+
+  </style>
+
+</head>
+
+<body>
+
+  <h1>Placar da Semana</h1>
+
+  <table id="placar">
+
+    <tr><th>Nome</th><th>Pontos</th></tr>
+
+  </table>
+
+
+
+  <!-- Firebase SDK -->
+
+  <script type="module">
+
+    // Importar funções do Firebase v10+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import { getFirestore, collection, query, orderBy, onSnapshot }
+
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+    // Configuração do Firebase
+
+    const firebaseConfig = {
+
+  apiKey: "AIzaSyA01tM7dBCL_jOFm7jmZ4EdaD5LyRUIsO0",
+
+  authDomain: "rpg1-60f54.firebaseapp.com",
+
+  projectId: "rpg1-60f54",
+
+  storageBucket: "rpg1-60f54.firebasestorage.app",
+
+  messagingSenderId: "400218389682",
+
+  appId: "1:400218389682:web:dfd1f93225816ada931dab",
+
+  measurementId: "G-7KD3VVTTZ2"
+
+    };
+
+
+
+    // Inicializar Firebase e Firestore
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+
+
+    // Query ordenada por pontos
+
+    const q = query(collection(db, "placar"), orderBy("pontos", "desc"));
+
+
+
+    // Escutar mudanças em tempo real
+
+    onSnapshot(q, (snapshot) => {
+
+      const tabela = document.getElementById("placar");
+
+      tabela.innerHTML = "<tr><th>Nome</th><th>Membros</th><th>Pontos</th></tr>";
+
+      snapshot.forEach((doc) => {
+
+        const dado = doc.data();
+
+        tabela.innerHTML += `<tr><td>${dado.nome}</td><td>${dado.membros}</td><td>${dado.pontos}</td></tr>`;
+
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>
